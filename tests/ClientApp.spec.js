@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-test.only('First practce', async function ({ page }) {
+test.skip('First practce', async function ({ page }) {
   // open register page
   await page.goto('https://rahulshettyacademy.com/client/');
   await page.locator('.text-reset').click();
   // register
-  const counter = 4;
+  const counter = 5;
 
   await page.locator('#firstName').fill(`testF${counter}`);
   await page.locator('#lastName').fill(`testL${counter}`);
