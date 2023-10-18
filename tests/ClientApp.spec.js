@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test.skip('First practce', async function ({ page }) {
+test('First practice', async function ({ page }) {
   // open register page
   await page.goto('https://rahulshettyacademy.com/client/');
-  await page.locator('.text-reset').click();
   // register
-  const counter = 5;
-
+  const counter = 4;
+  /*
+  await page.locator('.text-reset').click();
   await page.locator('#firstName').fill(`testF${counter}`);
   await page.locator('#lastName').fill(`testL${counter}`);
   await page.locator('#userEmail').fill(`test00${counter}@mail.com`);
@@ -21,6 +21,7 @@ test.skip('First practce', async function ({ page }) {
     'Account Created Successfully'
   );
   await page.locator("[routerlink='/auth']").click();
+  */
   // login
   await page.locator('#userEmail').fill(`test00${counter}@mail.com`);
   await page.locator('#userPassword').fill(`P@ss000${counter}`);
