@@ -119,7 +119,7 @@ test.only('E2E scenario', async function ({ page }) {
 
   const dropdown = page.locator('section.ta-results');
   await dropdown.waitFor();
-  await dropdown.locator('span').filter({ hasText: 'Ukraine' }).click();
+  await dropdown.locator('span').filter({ hasText: country }).click();
   await page.getByText('Place Order').click();
 
   // verify completion
