@@ -22,6 +22,6 @@ test('Popup validations', async function ({ page }) {
         name: 'Happy Subscibers!',
       })
       .textContent()
-  ).match(/[\d,]+/);
+  ).match(/[\d,]+/)[0];
   console.log(textCheck);
 });
