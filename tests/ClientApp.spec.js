@@ -33,7 +33,7 @@ test('First practice', async function ({ page }) {
   await expect(page.locator('h5 > b').first()).toHaveText('zara coat 3');
 });
 
-test.only('E2E scenario', async function ({ page }) {
+test('E2E scenario', async function ({ page }) {
   const extractNumber = priceValue => +priceValue.match(/\d+/);
 
   const username = 'test000@mail.com';
