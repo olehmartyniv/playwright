@@ -28,8 +28,6 @@ test('Browser Context test', async function ({ browser }) {
 test('UI Controls', async function ({ page }) {
   await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
 
-  const userName = page.locator('#username');
-  const signIn = page.locator('#signInBtn');
   const dropdown = page.locator('select.form-control');
   const radio = page.locator("[type='radio']").last();
   const checkbox = page.locator('#terms');
