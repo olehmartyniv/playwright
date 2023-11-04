@@ -1,7 +1,5 @@
 import { test, expect, request } from '@playwright/test';
-import APIUtils from '../utils/APIUtils.js';
-
-const setLocalStorage = value => window.localStorage.setItem('token', value);
+import APIUtils2 from '../utils/APIUtils2.js';
 
 const loginPayload = {
   userEmail: 'test000@mail.com',
@@ -15,17 +13,34 @@ const orderPayload = {
     },
   ],
 };
-let response;
+const contextOptions = {
+  baseURL: 'https://rahulshettyacademy.com/',
+  storageState: {
+    cookies: [],
+    origins: [
+      {
+        origin: '',
+        localStorage: [],
+      },
+    ],
+  },
+};
+
+let requestContext;
+let apiUtils;
 
 test.beforeAll(async function () {
-  const apiContext = await request.newContext();
-  const apiUtils = new APIUtils(apiContext, loginPayload);
-
-  response = await apiUtils.createOrder(orderPayload);
+  requestContext = await request.newContext();
+  apiUtils = new APIUtils2(requestContext, loginPayload);
+  contextOptions.storageState.origins[0].localStorage.push({
+    name: 'token',
+    value: `${await apiUtils.getToken(loginPayload)}`,
+  });
 });
 
-test('Set localStorage', async function ({ page }) {
-  page.addInitScript(setLocalStorage, response.authToken);
+test('Set localStorage', async function ({ browser }) {
+  const context = await browser.newContext(contextOptions);
+  const page = await context.newPage();
 
   await page.goto('https://rahulshettyacademy.com/client/');
 
@@ -43,8 +58,11 @@ test('Set localStorage', async function ({ page }) {
   await expect(cartButton.locator('label')).toHaveText('1');
 });
 
-test('Use headers', async function ({ page }) {
-  page.addInitScript(setLocalStorage, response.authToken);
+test('Use headers', async function ({ browser }) {
+  const orderId = await apiUtils.createOrder(orderPayload);
+
+  const context = await browser.newContext(contextOptions);
+  const page = await context.newPage();
 
   await page.goto('https://rahulshettyacademy.com/client/');
 
@@ -53,5 +71,5 @@ test('Use headers', async function ({ page }) {
   await expect(page.getByText('Your Orders')).toBeVisible();
   await expect(
     await page.locator("th[scope='row']").allTextContents()
-  ).toContain(response.orderId);
+  ).toContain(orderId);
 });
