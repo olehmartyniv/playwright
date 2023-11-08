@@ -26,11 +26,10 @@ const contextOptions = {
   },
 };
 
-let requestContext;
 let apiUtils;
 
 test.beforeAll(async function () {
-  requestContext = await request.newContext();
+  const requestContext = await request.newContext();
   apiUtils = new APIUtils2(requestContext, loginPayload);
   contextOptions.storageState.origins[0].localStorage.push({
     name: 'token',
