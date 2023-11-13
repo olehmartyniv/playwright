@@ -25,3 +25,18 @@ test('Popup validations', async function ({ page }) {
   ).match(/[\d,]+/)[0];
   console.log(textCheck);
 });
+
+test('Screenshot & Visual comparision', async function ({ page }) {
+  await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
+  await expect(page.locator('#displayed-text')).toBeVisible();
+  // await page.locator('#displayed-text').screenshot({ path: 'partialScreenshot.png' });
+  await page.locator('#hide-textbox').click();
+  await page.screenshot({ path: 'screenshot.png' });
+
+  await expect(page.locator('#displayed-text')).toBeHidden();
+});
+
+test('visual', async function ({ page }) {
+  await page.goto('https://google.com/');
+  expect(await page.screenshot()).toMatchSnapshot('landing.png');
+});
