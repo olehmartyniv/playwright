@@ -6,8 +6,8 @@ export default class LoginPage {
     this.signInButton = page.locator('#login');
   }
 
-  async goTo() {
-    await this.page.goto('https://rahulshettyacademy.com/client/');
+  goTo() {
+    return this.page.goto('https://rahulshettyacademy.com/client/');
   }
 
   async validLogin(username, password) {

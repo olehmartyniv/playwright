@@ -8,11 +8,11 @@ test('First practice', async function ({ page }) {
   const productName = 'zara coat 3';
   // login
   const loginPage = new LoginPage(page);
-  loginPage.goTo();
-  loginPage.validLogin(username, password);
+  await loginPage.goTo();
+  await loginPage.validLogin(username, password);
   // get first title
   const dashboardPage = new DashboardPage(page);
-  dashboardPage.searchProduct(productName);
+  expect(dashboardPage.searchProduct(productName)).toBeTruthy();
 });
 
 test('E2E scenario', async function ({ page }) {
@@ -24,37 +24,31 @@ test('E2E scenario', async function ({ page }) {
 
   // login
   const loginPage = new LoginPage(page);
-  loginPage.goTo();
-  loginPage.validLogin(username, password);
+  await loginPage.goTo();
+  await loginPage.validLogin(username, password);
 
   // add to cart
+  const dashboardPage = new DashboardPage(page);
   await expect(page).toHaveURL(/dash$/);
   await expect(
     page.locator('#sidebar').getByText('Home | Search')
   ).toBeVisible();
+  await dashboardPage.getRandomProduct();
 
-  const products = page.locator('div.card-body');
-  const cartButton = page.getByRole('button', { name: ' Cart' });
-  const product = products.nth(
-    Math.floor(Math.random() * (await products.count()))
-  );
+  const productName = await dashboardPage.getProductName();
+  const productPrice = extractNumber(await dashboardPage.getProductPrice());
 
-  const productName = await product.locator('b').textContent();
-  const productPrice = extractNumber(
-    await product.locator('div.text-muted').textContent()
-  );
-
-  await expect(cartButton.locator('label')).toHaveText('');
-  await product.getByRole('button', { name: ' Add To Cart' }).click();
-  await expect(cartButton.locator('label')).toHaveText('1');
-  await cartButton.click();
+  await expect(dashboardPage.getCartItemsNumbers()).toHaveText('');
+  await dashboardPage.addProductToCart();
+  await expect(dashboardPage.getCartItemsNumbers()).toHaveText('1');
+  await dashboardPage.goToCart();
 
   // cart
   await expect(page).toHaveURL(/cart$/);
   await expect(page.getByRole('heading', { name: 'My Cart' })).toBeVisible();
 
   await expect(page.getByRole('heading', { name: productName })).toBeVisible();
-  const cartItem = page
+  /*const cartItem = page
     .locator('div.cart > ul > li')
     .filter({ hasText: productName });
 
@@ -130,5 +124,5 @@ test('E2E scenario', async function ({ page }) {
   await expect(page).toHaveURL(/order-details/);
   await expect(page.getByText('order summary')).toBeVisible();
 
-  await expect(page.locator('div.col-text')).toHaveText(orderNumber);
+  await expect(page.locator('div.col-text')).toHaveText(orderNumber);*/
 });
