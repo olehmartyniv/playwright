@@ -11,25 +11,25 @@ export default class DashboardPage {
   }
 
   async getRandomProduct() {
-    this.product = this.products.nth(
+    return this.products.nth(
       Math.floor(Math.random() * (await this.products.count()))
     );
   }
 
-  async getProductName() {
-    return this.product.locator('b').textContent();
+  async getProductName(product) {
+    return product.locator('b').textContent();
   }
 
-  async getProductPrice() {
-    return this.product.locator('div.text-muted').textContent();
+  async getProductPrice(product) {
+    return product.locator('div.text-muted').textContent();
+  }
+
+  addProductToCart(product) {
+    return product.getByRole('button', { name: ' Add To Cart' }).click();
   }
 
   getCartItemsNumbers() {
     return this.cartButton.locator('label');
-  }
-
-  addProductToCart() {
-    return this.product.getByRole('button', { name: ' Add To Cart' }).click();
   }
 
   goToCart() {

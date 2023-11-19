@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../pageobjects/LoginPage.js';
 import DashboardPage from '../pageobjects/DashboardPage.js';
+import CartPage from '../pageobjects/CartPage.js';
+import OrderPage from '../pageobjects/OrderPage.js';
 
 test('First practice', async function ({ page }) {
   const username = 'test004@mail.com';
@@ -33,70 +35,56 @@ test('E2E scenario', async function ({ page }) {
   await expect(
     page.locator('#sidebar').getByText('Home | Search')
   ).toBeVisible();
-  await dashboardPage.getRandomProduct();
+  const product = await dashboardPage.getRandomProduct();
 
-  const productName = await dashboardPage.getProductName();
-  const productPrice = extractNumber(await dashboardPage.getProductPrice());
+  const productName = await dashboardPage.getProductName(product);
+  const productPrice = extractNumber(
+    await dashboardPage.getProductPrice(product)
+  );
 
   await expect(dashboardPage.getCartItemsNumbers()).toHaveText('');
-  await dashboardPage.addProductToCart();
+  await dashboardPage.addProductToCart(product);
   await expect(dashboardPage.getCartItemsNumbers()).toHaveText('1');
   await dashboardPage.goToCart();
 
   // cart
   await expect(page).toHaveURL(/cart$/);
   await expect(page.getByRole('heading', { name: 'My Cart' })).toBeVisible();
-
   await expect(page.getByRole('heading', { name: productName })).toBeVisible();
-  /*const cartItem = page
-    .locator('div.cart > ul > li')
-    .filter({ hasText: productName });
 
-  await expect(cartItem.locator('h3')).toHaveText(productName);
-  expect(
-    extractNumber(await cartItem.locator('div.prodTotal > p').textContent())
-  ).toBe(productPrice);
-  await page.getByRole('button', { name: 'Checkout' }).click();
+  const cartPage = new CartPage(page);
+  const cartItem = cartPage.getItem(productName);
+
+  expect(await cartPage.getItemName(cartItem)).toBe(productName);
+  expect(extractNumber(await cartPage.getItemPrice(cartItem))).toBe(
+    productPrice
+  );
+  await cartPage.goToCheckout();
 
   // checkout
   await expect(page).toHaveURL(/order/);
   await expect(page.getByText('Payment Method')).toBeVisible();
 
-  const itemDetails = page.locator('div.item__details');
+  const orderPage = new OrderPage(page);
 
-  await expect(itemDetails.locator('div.item__title')).toHaveText(productName);
-  await expect(
-    extractNumber(await itemDetails.locator('div.item__price').textContent())
-  ).toBe(productPrice);
-  await expect(itemDetails.locator('div.item__quantity')).toHaveText(
-    'Quantity: 1'
-  );
-  await expect(itemDetails.locator('div.item__description')).toHaveText(
-    productName
-  );
+  expect((await orderPage.getItemName()).trim()).toBe(productName);
+  expect(extractNumber(await orderPage.getItemPrice())).toBe(productPrice);
+  expect((await orderPage.getItemQuantity()).trim()).toBe('Quantity: 1');
+  expect(await orderPage.getItemDescription()).toBe(productName);
 
-  await expect(page.getByText('Credit Card', { exact: true })).toHaveClass(
-    /active/
-  );
-  await expect(page.locator(":text('Credit Card Number') + input")).toHaveValue(
-    '4542 9931 9292 2293'
-  );
-  await page.locator(":text('CVV Code ?') + input").fill('666');
-  await page
-    .locator(":text('Apply Coupon') + input")
-    .fill('rahulshettyacademy');
-  await page.getByRole('button', { name: 'Apply Coupon' }).click();
-  await expect(page.getByText('* Coupon Applied')).toBeVisible();
+  await expect(orderPage.paymentMethod).toHaveClass(/active/);
+  await expect(orderPage.creditCardNumber).toHaveValue('4542 9931 9292 2293');
+  await orderPage.creditCardCVVCode.fill('666');
+  await orderPage.couponInput.fill('rahulshettyacademy');
+  await orderPage.couponApplyButton.click();
+  await expect(orderPage.couponConfirmedLabel).toBeVisible();
 
-  await expect(page.locator('div.user__name > label')).toHaveText(username);
-  await page
-    .getByPlaceholder('Select Country')
-    .pressSequentially('ukr', { delay: 100 });
+  await expect(orderPage.shippingUsernam).toHaveText(username);
+  await orderPage.shippingCountry.pressSequentially('ukr', { delay: 100 });
 
-  const dropdown = page.locator('section.ta-results');
-  await dropdown.waitFor();
-  await dropdown.locator('span').filter({ hasText: country }).click();
-  await page.getByText('Place Order').click();
+  await orderPage.dropdownCountries.waitFor();
+  await orderPage.selectCountry(country).click();
+  await orderPage.placeOrderButton.click();
 
   // verify completion
   await expect(page).toHaveURL(/thanks/);
@@ -104,7 +92,7 @@ test('E2E scenario', async function ({ page }) {
     page.getByRole('heading', { name: 'Thankyou for the order.' })
   ).toBeVisible();
 
-  const orderNumber = (
+  /*const orderNumber = (
     await page.locator('td > label').last().textContent()
   ).match(/\w+/);
   await page.getByText('Orders History Page').click();
