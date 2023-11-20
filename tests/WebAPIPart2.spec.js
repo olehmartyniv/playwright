@@ -2,8 +2,8 @@ import { test, expect, request } from '@playwright/test';
 import APIUtils2 from '../utils/APIUtils2.js';
 
 const loginPayload = {
-  userEmail: 'test000@mail.com',
-  userPassword: 'P@ss0000',
+  userEmail: 'test001@mail.com',
+  userPassword: 'P@ss0001',
 };
 const orderPayload = {
   orders: [

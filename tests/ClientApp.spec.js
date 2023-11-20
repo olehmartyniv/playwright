@@ -36,13 +36,13 @@ test('First practice', async function ({ page }) {
 test('E2E scenario', async function ({ page }) {
   const extractNumber = priceValue => +priceValue.match(/\d+/);
 
-  const username = 'test000@mail.com';
+  const username = 'test001@mail.com';
   const country = 'Ukraine';
 
   await page.goto('https://rahulshettyacademy.com/client/');
   // login
   await page.locator('#userEmail').fill(username);
-  await page.locator('#userPassword').fill('P@ss0000');
+  await page.locator('#userPassword').fill('P@ss0001');
   await page.locator('#login').click();
 
   // add to cart

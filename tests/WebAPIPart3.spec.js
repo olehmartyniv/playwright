@@ -5,8 +5,8 @@ test.beforeAll(async function ({ browser }) {
   const page = await context.newPage();
 
   await page.goto('https://rahulshettyacademy.com/client/');
-  await page.locator('#userEmail').fill('test000@mail.com');
-  await page.locator('#userPassword').fill('P@ss0000');
+  await page.locator('#userEmail').fill('test003@mail.com');
+  await page.locator('#userPassword').fill('P@ss0003');
   await page.locator('#login').click();
   await page.waitForLoadState('networkidle');
 
