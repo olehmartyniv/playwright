@@ -37,6 +37,6 @@ test('Screenshot & Visual comparision', async function ({ page }) {
 });
 
 test('visual', async function ({ page }) {
-  await page.goto('https://google.com/');
+  await page.goto('https://www.example.com/');
   expect(await page.screenshot()).toMatchSnapshot('landing.png');
 });
