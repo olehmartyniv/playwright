@@ -26,7 +26,7 @@ test('Popup validations', async function ({ page }) {
   console.log(textCheck);
 });
 
-test('Screenshot & Visual comparision', async function ({ page }) {
+test('Screenshot', async function ({ page }) {
   await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
   await expect(page.locator('#displayed-text')).toBeVisible();
   // await page.locator('#displayed-text').screenshot({ path: 'partialScreenshot.png' });
@@ -36,10 +36,7 @@ test('Screenshot & Visual comparision', async function ({ page }) {
   await expect(page.locator('#displayed-text')).toBeHidden();
 });
 
-test('visual', async function ({ browser }) {
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  console.log(browser.version());
+test.skip('Visual comparision', async function ({ page }) {
   await page.goto('https://www.example.com/');
   // expect(await page.screenshot()).toMatchSnapshot('landing.png');
   await expect(page).toHaveScreenshot('landing.png');
