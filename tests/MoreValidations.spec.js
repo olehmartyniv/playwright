@@ -36,7 +36,10 @@ test('Screenshot & Visual comparision', async function ({ page }) {
   await expect(page.locator('#displayed-text')).toBeHidden();
 });
 
-test('visual', async function ({ page }) {
+test('visual', async function ({ browser }) {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  console.log(browser.version());
   await page.goto('https://www.example.com/');
   // expect(await page.screenshot()).toMatchSnapshot('landing.png');
   await expect(page).toHaveScreenshot('landing.png');
