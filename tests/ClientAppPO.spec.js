@@ -1,29 +1,32 @@
 import { test, expect } from '@playwright/test';
+import { customTest } from '../utils/testBase.js';
 import POManager from '../pageobjects/POManager.js';
+import testData from '../utils/placeorderTestData.json' assert { type: 'json' };
 
-test('First practice', async function ({ page }) {
-  const username = 'test003@mail.com';
-  const password = 'P@ss0003';
-  const productName = 'zara coat 3';
-  // login
-  const poManager = new POManager(page);
-  await poManager.loginPage.goTo();
-  await poManager.loginPage.validLogin(username, password);
-  // get first title
-  expect(poManager.dashboardPage.searchProduct(productName)).toBeTruthy();
-});
+for (const data of testData) {
+  test(`First practice for ${data.productName}`, async function ({ page }) {
+    // login
+    const poManager = new POManager(page);
+    await poManager.loginPage.goTo();
+    await poManager.loginPage.validLogin(data.username, data.password);
+    // get first title
+    expect(
+      await poManager.dashboardPage.searchProduct(data.productName)
+    ).toBeTruthy();
+  });
+}
 
-test('E2E scenario', async function ({ page }) {
+customTest('E2E scenario', async function ({ page, placeOrderData }) {
   const extractNumber = priceValue => +priceValue.match(/\d+/);
 
   const poManager = new POManager(page);
-  const username = 'test002@mail.com';
-  const password = 'P@ss0002';
-  const country = 'Ukraine';
 
   // login
   await poManager.loginPage.goTo();
-  await poManager.loginPage.validLogin(username, password);
+  await poManager.loginPage.validLogin(
+    placeOrderData.username,
+    placeOrderData.password
+  );
 
   // add to cart
   await expect(page).toHaveURL(/dash$/);
@@ -77,13 +80,18 @@ test('E2E scenario', async function ({ page }) {
   await poManager.orderPage.couponApplyButton.click();
   await expect(poManager.orderPage.couponConfirmedLabel).toBeVisible();
 
-  await expect(poManager.orderPage.shippingUsernam).toHaveText(username);
-  await poManager.orderPage.shippingCountry.pressSequentially('ukr', {
-    delay: 100,
-  });
+  await expect(poManager.orderPage.shippingUsernam).toHaveText(
+    placeOrderData.username
+  );
+  await poManager.orderPage.shippingCountry.pressSequentially(
+    placeOrderData.country.toLocaleLowerCase().slice(0, 3),
+    {
+      delay: 100,
+    }
+  );
 
   await poManager.orderPage.dropdownCountries.waitFor();
-  await poManager.orderPage.selectCountry(country).click();
+  await poManager.orderPage.selectCountry(placeOrderData.country).click();
   await poManager.orderPage.placeOrderButton.click();
 
   // verify completion
