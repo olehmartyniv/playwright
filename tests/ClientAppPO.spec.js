@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { customTest } from '../utils/testBase.js';
 import POManager from '../pageobjects/POManager.js';
-import testData from '../utils/placeorderTestData.json' assert { type: 'json' };
+import testData from '../utils/placeOrderTestData.json' assert { type: 'json' };
 
 for (const data of testData) {
   test(`First practice for ${data.productName}`, async function ({ page }) {
