@@ -37,7 +37,7 @@ test.beforeAll(async function () {
   });
 });
 
-test('Set localStorage', async function ({ browser }) {
+test('Set localStorage @api', async function ({ browser }) {
   const context = await browser.newContext(contextOptions);
   const page = await context.newPage();
 
@@ -57,7 +57,7 @@ test('Set localStorage', async function ({ browser }) {
   await expect(cartButton.locator('label')).toHaveText('1');
 });
 
-test('Use headers', async function ({ browser }) {
+test('Use headers @api', async function ({ browser }) {
   const orderId = await apiUtils.createOrder(orderPayload);
 
   const context = await browser.newContext(contextOptions);

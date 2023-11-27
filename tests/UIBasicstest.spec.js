@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+test.describe.configure({ mode: 'parallel' });
+
 test('Browser Context test', async function ({ browser }) {
   const context = await browser.newContext();
   const page = await context.newPage();

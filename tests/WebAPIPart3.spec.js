@@ -13,7 +13,7 @@ test.beforeAll(async function ({ browser }) {
   await context.storageState({ path: 'state.json' });
 });
 
-test('Use context', async function ({ browser }) {
+test('Use context @api', async function ({ browser }) {
   const context = await browser.newContext({ storageState: 'state.json' });
   const page = await context.newPage();
 

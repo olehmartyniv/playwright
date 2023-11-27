@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Popup validations', async function ({ page }) {
+test('Popup validations @web', async function ({ page }) {
   await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
   // await page.goto('https://google.com/');
   // await page.goBack();
@@ -26,7 +26,7 @@ test('Popup validations', async function ({ page }) {
   console.log(textCheck);
 });
 
-test('Screenshot', async function ({ page }) {
+test('Screenshot @web', async function ({ page }) {
   await page.goto('https://rahulshettyacademy.com/AutomationPractice/');
   await expect(page.locator('#displayed-text')).toBeVisible();
   // await page.locator('#displayed-text').screenshot({ path: 'partialScreenshot.png' });
@@ -36,7 +36,7 @@ test('Screenshot', async function ({ page }) {
   await expect(page.locator('#displayed-text')).toBeHidden();
 });
 
-test('Visual comparision', async function ({ page }) {
+test('Visual comparision @web', async function ({ page }) {
   await page.goto('https://www.example.com/');
   // expect(await page.screenshot()).toMatchSnapshot('landing.png');
   await expect(page).toHaveScreenshot('landing.png');

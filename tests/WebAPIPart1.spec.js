@@ -24,7 +24,7 @@ test.beforeAll(async function () {
   response = await apiUtils.createOrder(orderPayload);
 });
 
-test('Set localStorage', async function ({ page }) {
+test('Set localStorage @api', async function ({ page }) {
   page.addInitScript(setLocalStorage, response.authToken);
 
   await page.goto('https://rahulshettyacademy.com/client/');
@@ -43,7 +43,7 @@ test('Set localStorage', async function ({ page }) {
   await expect(cartButton.locator('label')).toHaveText('1');
 });
 
-test('Use headers', async function ({ page }) {
+test('Use headers @api', async function ({ page }) {
   page.addInitScript(setLocalStorage, response.authToken);
 
   await page.goto('https://rahulshettyacademy.com/client/');
