@@ -1,9 +1,10 @@
-import { Given, When, Then } from '@cucumber/cucumber';
+import { Given, When, Then, setDefaultTimeout } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
+
+setDefaultTimeout(10 * 1000);
 
 Given(
   'login to Ecommerce application with {string} and {string}',
-  { timeout: 10000 },
   async function (username, password) {
     await this.poManager.loginPage.goTo();
     await this.poManager.loginPage.validLogin(username, password);
@@ -22,25 +23,21 @@ Then('verify {string} is displayed in the Cart', async function (product) {
   await this.poManager.cartPage.goToCheckout();
 });
 
-When(
-  'enter valid details and place the order',
-  { timeout: 10000 },
-  async function () {
-    await this.poManager.orderPage.creditCardCVVCode.fill('666');
-    await this.poManager.orderPage.couponInput.fill('rahulshettyacademy');
-    await this.poManager.orderPage.couponApplyButton.click();
-    await expect(this.poManager.orderPage.couponConfirmedLabel).toBeVisible();
-    await this.poManager.orderPage.shippingCountry.pressSequentially('ukr', {
-      delay: 100,
-    });
-    await this.poManager.orderPage.dropdownCountries.waitFor();
-    await this.poManager.orderPage.selectCountry('Ukraine').click();
-    await this.poManager.orderPage.placeOrderButton.click();
-    this.orderNumber = (
-      await this.poManager.confirmationPage.orderNumber
-    ).match(/\w+/);
-  }
-);
+When('enter valid details and place the order', async function () {
+  await this.poManager.orderPage.creditCardCVVCode.fill('666');
+  await this.poManager.orderPage.couponInput.fill('rahulshettyacademy');
+  await this.poManager.orderPage.couponApplyButton.click();
+  await expect(this.poManager.orderPage.couponConfirmedLabel).toBeVisible();
+  await this.poManager.orderPage.shippingCountry.pressSequentially('ukr', {
+    delay: 100,
+  });
+  await this.poManager.orderPage.dropdownCountries.waitFor();
+  await this.poManager.orderPage.selectCountry('Ukraine').click();
+  await this.poManager.orderPage.placeOrderButton.click();
+  this.orderNumber = (await this.poManager.confirmationPage.orderNumber).match(
+    /\w+/
+  );
+});
 
 Then('verify order is present in the Order History', async function () {
   await this.poManager.confirmationPage.goToOrdersHistoryButton.click();
