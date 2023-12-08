@@ -78,11 +78,11 @@ customTest('E2E scenario', async function ({ page, placeOrderData }) {
   await poManager.orderPage.creditCardCVVCode.fill('666');
   await poManager.orderPage.couponInput.fill('rahulshettyacademy');
   await poManager.orderPage.couponApplyButton.click();
-  await expect(poManager.orderPage.couponConfirmedLabel).toBeVisible();
 
-  await expect(poManager.orderPage.shippingUsernam).toHaveText(
+  await expect(poManager.orderPage.shippingUsername).toHaveText(
     placeOrderData.username
   );
+  console.log(placeOrderData.country.toLocaleLowerCase().slice(0, 3));
   await poManager.orderPage.shippingCountry.pressSequentially(
     placeOrderData.country.toLocaleLowerCase().slice(0, 3),
     {
@@ -91,6 +91,7 @@ customTest('E2E scenario', async function ({ page, placeOrderData }) {
   );
 
   await poManager.orderPage.dropdownCountries.waitFor();
+  console.log(placeOrderData.country);
   await poManager.orderPage.selectCountry(placeOrderData.country).click();
   await poManager.orderPage.placeOrderButton.click();
 

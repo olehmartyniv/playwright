@@ -69,7 +69,7 @@ export default class OrderPage {
     return this.#couponConfirmedLabel;
   }
 
-  get shippingUsernam() {
+  get shippingUsername() {
     return this.#shippingUsername;
   }
 

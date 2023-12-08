@@ -36,7 +36,7 @@ test('Screenshot @web', async function ({ page }) {
   await expect(page.locator('#displayed-text')).toBeHidden();
 });
 
-test('Visual comparision @web', async function ({ page }) {
+test('Visual comparison @web', async function ({ page }) {
   await page.goto('https://www.example.com/');
   // expect(await page.screenshot()).toMatchSnapshot('landing.png');
   await expect(page).toHaveScreenshot('landing.png');

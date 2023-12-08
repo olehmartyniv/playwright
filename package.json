@@ -7,12 +7,15 @@
   "scripts": {
     "regression": "npx playwright test",
     "webTests": "npx playwright test --grep @web",
-    "apiTests": "npx playwright test --grep @api"
+    "apiTests": "npx playwright test --grep @api",
+    "safariNewConfig": "npx playwright test --config playwright.config.js --project=safari",
+    "cucumberRegression": "npx cucumber-js --tags '@regression' --retry 1 --format html:cucumber-report.html --exit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@cucumber/cucumber": "^10.0.1",
     "@playwright/test": "^1.40.0",
     "@types/node": "^20.8.9",
     "allure-playwright": "^2.9.2",

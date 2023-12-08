@@ -16,6 +16,10 @@ export default class DashboardPage {
     );
   }
 
+  getProductByName(productName) {
+    return this.products.filter({ hasText: productName });
+  }
+
   async getProductName(product) {
     return product.locator('b').textContent();
   }
